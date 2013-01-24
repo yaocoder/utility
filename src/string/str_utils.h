@@ -1,3 +1,13 @@
+/**
+ * @file
+ * @author  yaocoder <yaocoder@gamil.com>
+ * @section DESCRIPTION
+ * Utilities for String(thanks for James Fancy).
+ */
+
+#ifndef str_util_h__
+#define str_util_h__
+
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -117,3 +127,5 @@ namespace str_utils
 #endif
 
 }
+
+#endif 
