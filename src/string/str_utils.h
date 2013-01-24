@@ -109,14 +109,14 @@ namespace str_utils
 
 
 #ifdef BOOST
-	static std::vector<std::string> splitString(const std::string& str, const std::string& flag)
+	inline std::vector<std::string> splitString(const std::string& str, const std::string& flag)
 	{
 		std::vector<std::string> vec_temp;
 		boost::algorithm::split(vec_temp, str, boost::algorithm::is_any_of(flag));
 		return vec_temp;
 	}
 
-	static std::string replaceString(const std::string& str,
+	inline std::string replaceString(const std::string& str,
 		const std::string& flag,
 		const std::string& replaceFlag)
 	{
