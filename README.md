@@ -6,8 +6,7 @@
    * md5实现;
 * --common
    * 读取、设置配置文件的一个通用实现;
-   * 线程安全的std::vector;
-   * 线程安全的std::map;
+   * 线程安全的容器;
 * --sql
    * mysql数据库连接池的实现;
 * --string
