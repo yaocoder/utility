@@ -1,3 +1,6 @@
+#ifndef threadSafe_container_h__
+#define threadSafe_container_h__
+
 #include <boost/thread.hpp>
 #include <list>
 #include <vector>
@@ -6,7 +9,6 @@
 template<typename T>
 class CThreadSafeList
 {
-
 public:
 	CThreadSafeList() {}
 	~CThreadSafeList() 
@@ -24,17 +26,17 @@ public:
 		list_.push_back(pt);
 	}
 
-	T pop_front() 
+	bool pop_front(T &pt) 
 	{
 		boost::mutex::scoped_lock oLock(mutex_);
 		if (list_.size() > 0) 
 		{
-			T oThread = list_.front();
+			pt = list_.front();
 			list_.pop_front();
-			return oThread;
+			return true;
 		}
 
-		return t_object_;
+		return false;
 	}
 
 	void earse(T &Object) 
@@ -45,12 +47,12 @@ public:
 		{
 			if (Object == *it) 
 			{
-				list_.erase(it++);
+				list_.erase(it);
 				break;
 			}
 			else 
 			{
-				++it;
+				it++;
 			}
 		}
 	}
@@ -78,12 +80,10 @@ public:
 		return list_.empty();
 	}
 
-public:
-	boost::mutex mutex_;
 
 private:
 	std::list<T> list_;
-	T t_object_;
+	boost::mutex mutex_;
 };
 
 template<typename T>
@@ -118,17 +118,17 @@ public:
 		return t_object_;
 	}
 
-	T pop_front()
+	bool pop_front(T &Object)
 	{
 		boost::mutex::scoped_lock oLock(mutex_);
 		if (vector_.size() > 0)
 		{
-			T oThread = vector_.front();
+			Object = vector_.front();
 			vector_.pop_front();
-			return oThread;
+			return true;
 		}
 
-		return t_object_;
+		return false;
 	}
 
 	void earse(T &Object)
@@ -137,14 +137,14 @@ public:
 		typedef typename std::vector<T>::iterator iter_thread;
 		for (iter_thread it = vector_.begin(); it != vector_.end();)
 		{
-			if (Object == *it)
+			if (Object == *it) 
 			{
-				vector_.erase(it++);
+				list_.erase(it);
 				break;
 			}
-			else
+			else 
 			{
-				++it;
+				it++;
 			}
 		}
 	}
@@ -172,18 +172,14 @@ public:
 		return vector_.empty();
 	}
 
-public:
-	boost::mutex mutex_;
-
 private:
 	std::vector<T> vector_;
-	T t_object_;
+	boost::mutex mutex_;
 };
 
 template<typename K, typename V>
 class CThreadSafeMap
 {
-
 public:
 	CThreadSafeMap() {}
 	~CThreadSafeMap() 
@@ -200,18 +196,42 @@ public:
 		map_.insert(std::pair<K, V>(key, value));
 	}
 
-	V find(const K& key)
+	bool find(const K& key, V& value)
 	{
+		bool ret = false;
 		boost::mutex::scoped_lock oLock(mutex_);
 		if (map_.size() > 0)
 		{
 			typedef typename std::map<K, V>::iterator iter_thread;
 			iter_thread iter= map_.find(key);
 			if(iter != map_.end())
-				return iter->second;
+			{
+				value = iter->second;
+				ret = true;
+			}
 		}
 
-		return value_;
+		return ret;
+	}
+
+	bool findAndSet(const K& key, const V& new_value, V& old_value)
+	{
+		bool ret = false;
+		boost::mutex::scoped_lock oLock(mutex_);
+		if (map_.size() > 0)
+		{
+			typedef typename std::map<K, V>::iterator iter_thread;
+			iter_thread iter= map_.find(key);
+			if(iter != map_.end())
+			{
+				old_value = iter->second;
+				map_.erase(iter);
+				map_.insert(std::pair<K, V>(key, new_value));
+				ret = true;
+			}
+		}
+
+		return ret;
 	}
 
 	void earse(const K& key)
@@ -246,10 +266,9 @@ public:
 		return map_.empty();
 	}
 
-public:
-	boost::mutex mutex_;
-
 private:
+	boost::mutex mutex_;
 	std::map<K, V> map_;
-	V value_;
 };
+
+#endif
