@@ -134,7 +134,7 @@ namespace str_utils
 		const std::string& replaceFlag)
 	{
 		boost::regex expressionReplace(flag);
-		std::string strTemp = boost::regex_replace(str.c_str(), expressionReplace, replaceFlag);
+		std::string strTemp = boost::regex_replace(str, expressionReplace, replaceFlag);
 		return strTemp;
 	}
 #endif
