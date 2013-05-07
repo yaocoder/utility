@@ -135,7 +135,7 @@ namespace str_utils
 	{
 		boost::regex expressionReplace(flag);
 		std::string strTemp = boost::regex_replace(str.c_str(), expressionReplace, replaceFlag);
-		return strTemp
+		return strTemp;
 	}
 #endif
 
