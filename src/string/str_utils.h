@@ -106,13 +106,26 @@ namespace str_utils
 
 		return str;
 	}
-
+	
+	static inline void SplitStringStd(const std::string& str,  const std::string& delimiter, 
+					  std::vector<std::string>& vec_data)
+	{
+		std::string s = str;
+		size_t pos = 0;
+		std::string token;
+		while ((pos = s.find(delimiter)) != std::string::npos) 
+		{
+			token = s.substr(0, pos);
+			vec_data.push_back(token);
+			s.erase(0, pos + delimiter.length());
+		}
+	}
 
 #ifdef BOOST
-	inline std::vector<std::string> splitString(const std::string& str, const std::string& flag)
+	inline std::vector<std::string> splitStringBoost(const std::string& str, const std::string& delimiter)
 	{
 		std::vector<std::string> vec_temp;
-		boost::algorithm::split(vec_temp, str, boost::algorithm::is_any_of(flag));
+		boost::algorithm::split(vec_temp, str, boost::algorithm::is_any_of(delimiter));
 		return vec_temp;
 	}
 
@@ -121,7 +134,7 @@ namespace str_utils
 		const std::string& replaceFlag)
 	{
 		boost::regex expressionReplace(flag);
-		std::string strTemp = boost::regex_replace(	str.c_str(), expressionReplace, replaceFlag);
+		std::string strTemp = boost::regex_replace(str.c_str(), expressionReplace, replaceFlag);
 		return strTemp
 	}
 #endif
