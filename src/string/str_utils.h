@@ -11,6 +11,11 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <iostream>
+#ifdef BOOST
+#include <boost/algorithm/string.hpp>
+#include <boost/regex.hpp>
+#endif
 
 namespace str_utils
 {
