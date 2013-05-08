@@ -65,14 +65,14 @@ namespace str_utils
 		return toLower(str1) == toLower(str2);
 	}
 
-	template<class T> std::string toString(const T& value)
+	template<typename T> std::string toString(const T& value)
 	{
 		std::ostringstream oss;
 		oss << value;
 		return oss.str();
 	}
 
-	template<class T> void string2T(const std::string& str, T& value)
+	template<typename T> void string2T(const std::string& str, T& value)
 	{	
 		std::istringstream iss(str);
 		iss >> value;
