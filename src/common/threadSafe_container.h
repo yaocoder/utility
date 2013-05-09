@@ -39,7 +39,7 @@ public:
 		return false;
 	}
 
-	void earse(T &Object) 
+	void erase(T &Object) 
 	{
 		boost::mutex::scoped_lock oLock(mutex_);
 		typedef typename std::list<T>::iterator iter_thread;
@@ -131,7 +131,7 @@ public:
 		return false;
 	}
 
-	void earse(T &Object)
+	void erase(T &Object)
 	{
 		boost::mutex::scoped_lock oLock(mutex_);
 		typedef typename std::vector<T>::iterator iter_thread;
@@ -234,7 +234,7 @@ public:
 		return ret;
 	}
 
-	void earse(const K& key)
+	void erase(const K& key)
 	{
 		boost::mutex::scoped_lock oLock(mutex_);
 		typedef typename std::map<K, V>::iterator iter_thread;
