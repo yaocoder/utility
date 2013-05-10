@@ -9,6 +9,7 @@
    * 线程安全的容器;
 * --sql
    * mysql数据库连接池的实现;
+   * 拼接sql组合查询字符串；
 * --string
    * --windows
       * windows平台下的编码类型转换;
