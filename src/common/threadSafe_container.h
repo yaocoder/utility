@@ -42,19 +42,7 @@ public:
 	void erase(T &Object) 
 	{
 		boost::mutex::scoped_lock oLock(mutex_);
-		typedef typename std::list<T>::iterator iter_thread;
-		for (iter_thread it = list_.begin(); it != list_.end();) 
-		{
-			if (Object == *it) 
-			{
-				list_.erase(it);
-				break;
-			}
-			else 
-			{
-				it++;
-			}
-		}
+		list_.remove(Object);
 	}
 
 	void clear()
@@ -134,19 +122,7 @@ public:
 	void erase(T &Object)
 	{
 		boost::mutex::scoped_lock oLock(mutex_);
-		typedef typename std::vector<T>::iterator iter_thread;
-		for (iter_thread it = vector_.begin(); it != vector_.end();)
-		{
-			if (Object == *it) 
-			{
-				list_.erase(it);
-				break;
-			}
-			else 
-			{
-				it++;
-			}
-		}
+		vector_.erase(remove(vector_.begin(), vector_.end(), Object), vector_.end()); 
 	}
 
 	void clear()
@@ -237,10 +213,7 @@ public:
 	void erase(const K& key)
 	{
 		boost::mutex::scoped_lock oLock(mutex_);
-		typedef typename std::map<K, V>::iterator iter_thread;
-		iter_thread iter= map_.find(key);
-		if(iter != map_.end())
-			map_.erase(iter);
+		map_.erase(key);
 	}
 
 	void clear()
