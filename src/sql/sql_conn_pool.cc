@@ -18,15 +18,16 @@
 #include <cppconn/config.h>
 #include <cppconn/connection.h>
 #include "defines.h"
-#include "../public/utils.h"
 #include "../public/config_file.h"
+#include "../public/utils.h"
 
 using namespace std;
 using namespace sql;
 
 CSqlConnPool::CSqlConnPool()
 {
-
+	driver_ = NULL;
+	DBName_ = NULL;
 }
 
 CSqlConnPool::~CSqlConnPool()
@@ -60,7 +61,7 @@ void CSqlConnPool::Init(const SqlConnInfo& sqlConnInfo)
 		}
 		else
 		{
-			LOG4CXX_ERROR(g_logger, "CSqlConnPool::Init:One connection failed!");
+			LOG4CXX_ERROR(g_logger, "CSqlConnPool::Init:connection failed! index = " << i);
 		}
 	}
 }
@@ -87,7 +88,7 @@ sql::Connection * CSqlConnPool::CreateConnection()
 		std::string url = string("tcp://") + sqlConnInfo_.ip + string(":") + sqlConnInfo_.port;
 		conn = driver_->connect(url.c_str(), sqlConnInfo_.user_name.c_str(), sqlConnInfo_.password.c_str());
 
-		LOG4CXX_TRACE(g_logger, "CSqlConnPool::CreateConnection:Create one new connection. dbname = " << DBName_);
+		LOG4CXX_TRACE(g_logger, "CSqlConnPool::CreateConnection:Create one new connection.");
 	}
 	catch (sql::SQLException &e)
 	{
@@ -127,29 +128,26 @@ sql::Connection * CSqlConnPool::GetConnection()
 	{
 		conn = queue_conn_.front();
 		queue_conn_.pop_front();
-		if (!this->IsValidConnection(conn))
-		{
-			this->TerminateConnection(conn);
-			conn = NULL;
-			LOG4CXX_WARN(g_logger, "CSqlConnPool::GetConnection:one connection has invalid.");
-		}
-		else
-			return conn;
 	}
 
-	if (conn == NULL)
-	{
-		conn = this->CreateConnection();
-	}
-
+	/* 如果连接不是空指针，先判断是否已经失效（8小时未用失效问题)*/
 	if (conn)
 	{
 		if (!this->IsValidConnection(conn))
 		{
 			this->TerminateConnection(conn);
-			conn = NULL;
 		}
 	}
+
+	if (conn == NULL)
+	{
+		conn = this->CreateConnection();
+		if(conn != NULL)
+		{
+			conn->setSchema(DBName_);
+		}
+	}
+
 
 	return conn;
 }
