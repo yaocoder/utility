@@ -1,3 +1,9 @@
+/**
+ * @author  yaocoder <yaocoder@gamil.com>
+ * @section DESCRIPTION
+ * 组装SQL查询语句
+ */
+
 #ifndef SQL_UTILS_H_
 #define SQL_UTILS_H_
 

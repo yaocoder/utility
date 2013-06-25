@@ -1,5 +1,4 @@
 /**
- * @file
  * @author  yaocoder <yaocoder@gamil.com>
  * @section DESCRIPTION
  * Utilities for String(thanks for James Fancy).

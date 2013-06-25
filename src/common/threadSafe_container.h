@@ -1,3 +1,9 @@
+/**
+ * @author  yaocoder <yaocoder@gamil.com>
+ * @section DESCRIPTION
+ * STL容器的线程安全版本
+*/
+
 #ifndef threadSafe_container_h__
 #define threadSafe_container_h__
 
