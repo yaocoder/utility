@@ -1,7 +1,7 @@
-###utils C/C++的常用工具类###
-####Common Utilities class and function (C/C++)####
+
 ****
-**src**
+####src(C/C++的常用工具类)####
+
 * --algorithm  
    * md5实现;
 * --common
@@ -21,5 +21,9 @@
 	  * windows下一个定时器工具类
    * 互斥量封装;
    * 时间操作工具类;
+***
+###script###
+
+* windows平台下批量运行exe及终止脚本
        
       
