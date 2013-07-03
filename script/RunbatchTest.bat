@@ -8,4 +8,4 @@ SET SLEEP=ping 127.0.0.1 -n
  if %b%==200 exit
  goto:a
  
- rem 30  间隔秒数 200 执行次数
+ rem 30  闂撮殧绉掓暟 200 杩愯瀹炰緥涓暟 
