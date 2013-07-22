@@ -27,5 +27,7 @@
 ###script###
 
 * windows平台下批量运行exe及终止脚本
+
+* Jenkins打包部分的python脚本
        
       
