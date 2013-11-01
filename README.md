@@ -29,5 +29,9 @@
 * windows平台下批量运行exe及终止脚本
 
 * Jenkins打包部分的python脚本
+
+###project###
+
+* windows系统下自动升级接口，包括利用curl库的下载，md5校验文件，解压zip
        
       
