@@ -57,6 +57,13 @@ def delete_extension(path,extension_list):
                     os.remove(os.path.join(root,file_path))
                     print file_path+" has deleted"
 
+#删除指定目录下的文件
+def removeFileInFirstDir(targetDir): 
+    for file in os.listdir(targetDir): 
+        targetFile = os.path.join(targetDir,  file) 
+        if os.path.isfile(targetFile): 
+           os.remove(targetFile)
+
 if __name__ == '__main__':
     src = 'd:/src'
     str_time = time.strftime('%Y%m%d',time.localtime(time.time()))
