@@ -1,27 +1,20 @@
 #include <iostream>
+using namespace std;
+
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/system/system_error.hpp> 
+#include <boost/system/system_error.hpp>
 #include <boost/thread.hpp>
+#include <time.h>
 
-typedef void (*Func)();
-
-void print()
-{
-	std::cout << "Hello, world!\n";
-}
-
-void print1()
-{
-	std::cout << "hahahhahh\n";
-}
+typedef void (*Func)(void* param);
 
 class TimerImplByAsio
 {
 
 public:
-	TimerImplByAsio(Func f) : func_(f), timer_(io_, boost::posix_time::seconds(0))
+	TimerImplByAsio(Func f, void* param, long seconds) :param_(param),heartBeatSeconds_(seconds), func_(f), timer_(io_, boost::posix_time::seconds(0))
 	{
 		try
 		{
@@ -29,9 +22,9 @@ public:
 		}
 		catch(boost::system::system_error& ex )
 		{
-			boost::system::error_code ec = ex.code(); 
-			std::cerr << ec.value() << std::endl; 
-			std::cerr << ec.category().name() << std::endl; 
+			boost::system::error_code ec = ex.code();
+			std::cerr << ec.value() << std::endl;
+			std::cerr << ec.category().name() << std::endl;
 		}
 
 	}
@@ -44,12 +37,12 @@ public:
 		}
 		catch(boost::system::system_error& ex )
 		{
-			boost::system::error_code ec = ex.code(); 
-			std::cerr << ec.value() << std::endl; 
-			std::cerr << ec.category().name() << std::endl; 
+			boost::system::error_code ec = ex.code();
+			std::cerr << ec.value() << std::endl;
+			std::cerr << ec.category().name() << std::endl;
 		}
 	}
-	
+
 	void Stop()
 	{
 		try
@@ -58,13 +51,15 @@ public:
 		}
 		catch( boost::system::system_error& ex )
 		{
-			boost::system::error_code ec = ex.code(); 
-			std::cerr << ec.value() << std::endl; 
-			std::cerr << ec.category().name() << std::endl; 
+			boost::system::error_code ec = ex.code();
+			std::cerr << ec.value() << std::endl;
+			std::cerr << ec.category().name() << std::endl;
 		}
 	}
 
 private:
+	void* 	param_;
+	long	heartBeatSeconds_;
 	Func	func_;
 	boost::asio::io_service io_;
 	boost::asio::deadline_timer timer_;
@@ -72,52 +67,49 @@ private:
 	{
 		try
 		{
-			func_();
-			timer_.expires_at(timer_.expires_at() + boost::posix_time::seconds(2));
+			func_(param_);
+			timer_.expires_at(timer_.expires_at() + boost::posix_time::seconds(heartBeatSeconds_));
 			timer_.async_wait(boost::bind(&TimerImplByAsio::update, this));
 		}
 		catch(boost::system::system_error& ex )
 		{
-			boost::system::error_code ec = ex.code(); 
-			std::cerr << ec.value() << std::endl; 
-			std::cerr << ec.category().name() << std::endl; 
+			boost::system::error_code ec = ex.code();
+			std::cerr << ec.value() << std::endl;
+			std::cerr << ec.category().name() << std::endl;
 		}
 	}
 };
 
-class CImpl
+class CImplTimer
 {
 public:
 
-	void HeartBeatImpl(Func func);
+	void HeartBeatImpl(Func func, void* param, long seconds);
 
 	void StopHeartBeatImpl();
 
 private:
 
-	Func func_;
 	TimerImplByAsio *timer_;
 	static void HeartBeatImplThread(void* arg);
 };
 
-void CImpl::HeartBeatImpl( Func func )
+void CImplTimer::HeartBeatImpl( Func func, void* param, long seconds)
 {
-	func_ = func;
-
-	timer_ = new TimerImplByAsio(func_);
+	timer_ = new TimerImplByAsio(func, param, seconds);
 
 	boost::thread thread_obj(boost::bind(&HeartBeatImplThread, (void*)this));
 }
 
-void CImpl::HeartBeatImplThread( void* arg )
+void CImplTimer::HeartBeatImplThread( void* arg )
 {
-	CImpl *pThis = static_cast<CImpl*>(arg);
+	CImplTimer *pThis = static_cast<CImplTimer*>(arg);
 
 	pThis->timer_->Run();
 
 }
 
-void CImpl::StopHeartBeatImpl()
+void CImplTimer::StopHeartBeatImpl()
 {
 	timer_->Stop();
 	if (timer_ != NULL)
@@ -126,14 +118,38 @@ void CImpl::StopHeartBeatImpl()
 	}
 }
 
+void print(void* param)
+{
+	std::cout << param << "Hello, world!\n";
+}
+
+void print2()
+{
+	std::cout << "hahahhahah!\n";
+}
+
+
 int main()
 {
 	CImpl *impl = new CImpl;
-	impl->HeartBeatImpl(print);
+	int* param = new int;
+	impl->HeartBeatImpl(print, (void*)param, 3);
 
-	getchar();
+	sleep(10);
 
 	impl->StopHeartBeatImpl();
+
+	delete impl;
+
+	cout << "****end****" << endl;
+	CImpl *impl1 = new CImpl;
+	impl1->HeartBeatImpl(print2, 3);
+
+	sleep(10);
+
+	impl1->StopHeartBeatImpl();
+
+	delete impl1;
 
 	return 0;
 }
