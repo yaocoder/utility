@@ -2,29 +2,19 @@
 ****
 ####src(C/C++的常用工具类)####
 
-* --algorithm  
    * md5实现;
-* --common
+   * md5+salt实现密码；
    * 读取、设置配置文件的一个通用实现;
    * 线程安全的容器;
-   * md5 + salt 密码
-* --sql
    * mysql数据库连接池的实现;
    * 拼接sql组合查询字符串;
-* --string
-   * --windows
-      * windows平台下的编码类型转换;
+   * windows平台下的编码类型转换;
    * 标准string的通用方法;
-* --system
-   * --window
-      * 程序崩溃时生成dump文件以供windbg作分析;
-      * 路径工具类;
-	  * windows下一个定时器工具类
+   * 程序崩溃时生成dump文件以供windbg作分析;
+   * windows路径工具类;
    * 互斥量封装;
    * 时间操作工具类;
    * 定时器
-
-***
 
 ###script###
 
