@@ -15,6 +15,7 @@
    * 互斥量封装;
    * 时间操作工具类;
    * 定时器
+   * 跨平台（linux，windows，ios，android）日志头文件
 
 ###script###
 
