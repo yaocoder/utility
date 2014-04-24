@@ -2,7 +2,7 @@
 // Author      : yaocoder
 // Version     :
 // Copyright   : Your copyright notice
-// Description : libevent封装的定时器
+// Description : libevent灏佽鐨勫畾鏃跺櫒
 //============================================================================
 #include <time.h>
 #include <boost/bind.hpp>
