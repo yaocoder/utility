@@ -1,0 +1,2 @@
+killall []
+echo "killall success!"
