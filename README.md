@@ -1,6 +1,5 @@
 
-****
-####src(C/C++的常用工具类)####
+#### src(C/C++的常用工具类)
 
    * md5实现;
    * md5+salt实现密码；
@@ -17,13 +16,13 @@
    * 定时器
    * 跨平台（linux，windows，ios，android）日志头文件
 
-###script###
+### script
 
 * windows平台下批量运行exe及终止脚本
 
 * Jenkins打包部分的python脚本
 
-###project###
+### project
 
 * windows系统下自动升级接口，包括利用curl库的下载，md5校验文件，解压zip
        
